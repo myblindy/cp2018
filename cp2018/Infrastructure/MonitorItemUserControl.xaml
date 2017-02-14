@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="cp2018.Infrastructure.MonitorItemUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:cp2018.Infrastructure"
+             xmlns:vc="clr-namespace:cp2018.ValueConverters">
+    <UserControl.Resources>
+        <vc:MonitoredItemStatusToImageConverter x:Key="MonitoredItemStatusToImageConverter" />
+        <vc:MonitoredItemWidthConverter x:Key="MonitoredItemWidthConverter" />
+        <vc:MonitoredItemHeightConverter x:Key="MonitoredItemHeightConverter" />
+    </UserControl.Resources>
+
+    <Border BorderBrush="Black" BorderThickness="1" Margin="{StaticResource MonitoredItemsControlMargin}" 
+            MinWidth="{Binding Converter={StaticResource MonitoredItemWidthConverter}}" 
+            MinHeight="{Binding Converter={StaticResource MonitoredItemHeightConverter}}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- name -->
+            <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource MonitoredItemsControlHeaderBackground}">
+                <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                       FontWeight="Bold" TextDecorations="Underline"  />
+            </Border>
+
+            <!-- description -->
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Description}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+            <!-- status icon -->
+            <Image Grid.Row="1" Grid.Column="0" Source="{Binding Status, Converter={StaticResource MonitoredItemStatusToImageConverter}}"
+                               Width="40" Height="40" Margin="3"/>
+
+        </Grid>
+    </Border>
+</UserControl>
