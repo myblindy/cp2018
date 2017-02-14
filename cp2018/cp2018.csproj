@@ -71,6 +71,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Adorners\DesignAdorner.cs" />
     <Compile Include="Infrastructure\MonitorItemsControl.xaml.cs">
       <DependentUpon>MonitorItemsControl.xaml</DependentUpon>
     </Compile>

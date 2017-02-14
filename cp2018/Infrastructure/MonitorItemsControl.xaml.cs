@@ -100,8 +100,7 @@ namespace cp2018.Infrastructure
                 return;
 
             var margin = (Thickness)Application.Current.Resources["MonitoredItemsControlMargin"];
-            var basetilew = (double)Application.Current.Resources["MonitoredItemsControlTileWidth"];
-            var tilew = 1 + margin.Left + basetilew + margin.Right + 1;
+            var tilew = 1 + margin.Left + (double)Application.Current.Resources["MonitoredItemsControlTileWidth"] + margin.Right + 1;
             var tileh = 1 + margin.Top + (double)Application.Current.Resources["MonitoredItemsControlTileHeight"] + margin.Bottom + 1;
 
             int x = 0, y = 0;

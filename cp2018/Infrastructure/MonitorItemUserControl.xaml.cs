@@ -1,4 +1,5 @@
-﻿using System;
+﻿using cp2018.Adorners;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,12 @@ namespace cp2018.Infrastructure
         public MonitorItemUserControl()
         {
             InitializeComponent();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            var layer = AdornerLayer.GetAdornerLayer(Border);
+            layer.Add(new DesignAdorner(Border));
         }
     }
 }

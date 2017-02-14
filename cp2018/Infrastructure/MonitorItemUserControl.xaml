@@ -2,14 +2,15 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:cp2018.Infrastructure"
-             xmlns:vc="clr-namespace:cp2018.ValueConverters">
+             xmlns:vc="clr-namespace:cp2018.ValueConverters"
+             Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <vc:MonitoredItemStatusToImageConverter x:Key="MonitoredItemStatusToImageConverter" />
         <vc:MonitoredItemWidthConverter x:Key="MonitoredItemWidthConverter" />
         <vc:MonitoredItemHeightConverter x:Key="MonitoredItemHeightConverter" />
     </UserControl.Resources>
 
-    <Border BorderBrush="Black" BorderThickness="1" Margin="{StaticResource MonitoredItemsControlMargin}" 
+    <Border x:Name="Border" BorderBrush="Black" BorderThickness="1" Margin="{StaticResource MonitoredItemsControlMargin}" 
             MinWidth="{Binding Converter={StaticResource MonitoredItemWidthConverter}}" 
             MinHeight="{Binding Converter={StaticResource MonitoredItemHeightConverter}}">
         <Grid>
