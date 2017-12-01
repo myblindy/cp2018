@@ -1,4 +1,5 @@
 ﻿using cp2018.Models;
+using cp2018.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,23 +22,14 @@ namespace cp2018
     /// </summary>
     public partial class MainWindow : Window
     {
+        MainWindowViewModel ViewModel = new MainWindowViewModel();
+
         public MainWindow()
         {
             InitializeComponent();
 
-            var rng = new Random();
-            var items = Enumerable.Range(0, 40)
-                .Select(i => new MonitoredItem
-                {
-                    Name = "Item" + i,
-                    Description = "Random element " + i,
-                    Status = (MonitoredItemStatus)rng.Next(5),
-                    Width = rng.Next(1, 3),
-                    Height = rng.Next(1, 3)
-                })
-                .ToArray();
-
-            Items.ItemsSource = items;
+            ViewModel.TabsList.Add(new PageTabEntry { Name = "Status", Content = new StatusPage() });
+            DataContext = ViewModel;
         }
     }
 }

@@ -21,15 +21,57 @@ namespace cp2018.Infrastructure
     /// </summary>
     public partial class MonitorItemUserControl : UserControl
     {
+        private MonitorItemsControl monitorItemsControl;
+        private MonitorItemsControl MonitorItemsControl
+        {
+            get
+            {
+                if (monitorItemsControl != null)
+                    return monitorItemsControl;
+
+                return monitorItemsControl = this.FindParent<MonitorItemsControl>();
+            }
+        }
+
         public MonitorItemUserControl()
         {
             InitializeComponent();
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        public static readonly DependencyProperty DesignModeProperty = DependencyProperty.Register(
+            "DesignMode", typeof(bool), typeof(MonitorItemUserControl), new PropertyMetadata(false, OnDesignModeChanged));
+        public bool DesignMode { get => (bool)GetValue(DesignModeProperty); set => SetValue(DesignModeProperty, value); }
+
+        private static void OnDesignModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var layer = AdornerLayer.GetAdornerLayer(Border);
-            layer.Add(new DesignAdorner(Border));
+            // no selection if not in design mode
+            d.SetValue(SelectedProperty, false);
+        }
+
+        public static readonly DependencyProperty SelectedProperty = DependencyProperty.Register(
+            "Selected", typeof(bool), typeof(MonitorItemUserControl), new PropertyMetadata(false, OnSelectedChanged));
+        public bool Selected { get => (bool)GetValue(SelectedProperty); set => SetValue(SelectedProperty, value); }
+
+        private static void OnSelectedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            // allow only one item to be selected
+            if ((bool)e.NewValue)
+            {
+                var _this = (MonitorItemUserControl)d;
+
+                // deselect the previously selected item if any
+                if (_this.MonitorItemsControl.SelectedItem != null)
+                    _this.MonitorItemsControl.SelectedItem.Selected = false;
+
+                // and set ourselves as the selected item
+                _this.MonitorItemsControl.SelectedItem = _this;
+            }
+        }
+
+        private void Item_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (DesignMode)
+                Selected = true;
         }
     }
 }

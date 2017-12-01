@@ -2,25 +2,25 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:cp2018.Infrastructure" >
-    <ItemsControl x:Name="Items">
-
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <Canvas />
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <local:MonitorItemUserControl DataContext="{Binding Object}" />
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-
-        <ItemsControl.ItemContainerStyle>
-            <Style TargetType="ContentPresenter">
-                <Setter Property="Canvas.Left" Value="{Binding X}" />
-                <Setter Property="Canvas.Top" Value="{Binding Y}" />
-            </Style>
-        </ItemsControl.ItemContainerStyle>
-    </ItemsControl>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <ItemsControl x:Name="Items">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <local:CanvasAutoSize />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <local:MonitorItemUserControl DataContext="{Binding Object}"
+                                                  DesignMode="{Binding DesignMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MonitorItemsControl}}}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left" Value="{Binding X}" />
+                    <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+    </ScrollViewer>
 </UserControl>

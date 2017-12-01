@@ -22,35 +22,36 @@ namespace cp2018.Adorners
             VisualCollection = new VisualCollection(this);
             AddThumbCorner(ref BottomLeftThumb, Cursors.SizeNESW);
             AddThumbCorner(ref BottomRightThumb, Cursors.SizeNWSE);
+
+            //BottomLeftThumb.DragDelta+=(_, e)=>
         }
 
         private void AddThumbCorner(ref Thumb thumb, Cursor cursor) =>
-            VisualCollection.Add(new Thumb
+            VisualCollection.Add(thumb = new Thumb
             {
                 Cursor = cursor,
                 Height = 10,
                 Width = 10,
-                Opacity = .4,
-                Background = Brushes.White
             });
 
         protected override Size ArrangeOverride(Size finalSize)
         {
-            return base.ArrangeOverride(finalSize);
+            var adornedwidth = AdornedElement.DesiredSize.Width;
+            var adornedheight = AdornedElement.DesiredSize.Height;
+
+            var adornerwidth = DesiredSize.Width;
+            var adornerheight = DesiredSize.Height;
+
+            BottomLeftThumb.Arrange(new Rect(0, adornerheight - BottomLeftThumb.Height, 
+                BottomLeftThumb.Width, BottomLeftThumb.Height));
+            BottomRightThumb.Arrange(new Rect(adornerwidth - BottomRightThumb.Width, adornerheight - BottomRightThumb.Height,
+                BottomRightThumb.Width, BottomRightThumb.Height));
+
+            return finalSize;
         }
 
-        //protected override void OnRender(DrawingContext drawingContext)
-        //{
-        //    var rect = new Rect(AdornedElement.RenderSize);
+        protected override int VisualChildrenCount => VisualCollection.Count;
 
-        //    // Some arbitrary drawing implements.
-        //    var brush = new SolidColorBrush(Colors.Green) { Opacity = .2 };
-        //    var pen = new Pen(new SolidColorBrush(Colors.Navy), 1.5);
-        //    const double radius = 5.0;
-
-        //    // Draw a circle at each corner.
-        //    drawingContext.DrawEllipse(brush, pen, rect.BottomLeft, radius, radius);
-        //    drawingContext.DrawEllipse(brush, pen, rect.BottomRight, radius, radius);
-        //}
+        protected override Visual GetVisualChild(int index) => VisualCollection[index];
     }
 }

@@ -1,6 +1,20 @@
-﻿<Window x:Class="cp2018.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:cp2018" xmlns:infrastructure="clr-namespace:cp2018.Infrastructure" Title="Control Panel 2018">
-    <infrastructure:MonitorItemsControl x:Name="Items" />
+        xmlns:local="clr-namespace:cp2018" 
+        xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+        xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" x:Class="cp2018.MainWindow"
+        Title="Control Panel 2018">
+    <TabControl ItemsSource="{Binding TabsList}" SelectedIndex="0">
+        <TabControl.ItemTemplate>
+            <DataTemplate>
+                <TextBlock Text="{Binding Name}"/>
+            </DataTemplate>
+        </TabControl.ItemTemplate>
+        <TabControl.ContentTemplate>
+            <DataTemplate>
+                <ContentControl Content="{Binding Content}"/>
+            </DataTemplate>
+        </TabControl.ContentTemplate>
+    </TabControl>
 </Window>

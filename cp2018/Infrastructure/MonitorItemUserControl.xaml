@@ -3,16 +3,42 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:cp2018.Infrastructure"
              xmlns:vc="clr-namespace:cp2018.ValueConverters"
-             Loaded="UserControl_Loaded">
+             xmlns:ee="http://schemas.microsoft.com/expression/2010/effects"
+             x:Name="PageRoot" PreviewMouseDown="Item_MouseDown">
     <UserControl.Resources>
         <vc:MonitoredItemStatusToImageConverter x:Key="MonitoredItemStatusToImageConverter" />
         <vc:MonitoredItemWidthConverter x:Key="MonitoredItemWidthConverter" />
         <vc:MonitoredItemHeightConverter x:Key="MonitoredItemHeightConverter" />
+        <vc:DashedStrokeDashArrayIfTrue x:Key="DashedStrokeDashArrayIfTrue" />
     </UserControl.Resources>
 
-    <Border x:Name="Border" BorderBrush="Black" BorderThickness="1" Margin="{StaticResource MonitoredItemsControlMargin}" 
+    <UserControl.Style>
+        <Style TargetType="{x:Type local:MonitorItemUserControl}">
+            <Style.Triggers>
+                <Trigger Property="Selected" Value="true">
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <ee:BloomEffect BloomIntensity="1.3" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Style>
+
+    <Border x:Name="Border" BorderThickness="1" Margin="{StaticResource MonitoredItemsControlMargin}" 
             MinWidth="{Binding Converter={StaticResource MonitoredItemWidthConverter}}" 
-            MinHeight="{Binding Converter={StaticResource MonitoredItemHeightConverter}}">
+            MinHeight="{Binding Converter={StaticResource MonitoredItemHeightConverter}}" Background="Transparent">
+        <Border.BorderBrush>
+            <VisualBrush>
+                <VisualBrush.Visual>
+                    <Rectangle StrokeDashArray="{Binding Selected, Converter={StaticResource DashedStrokeDashArrayIfTrue}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MonitorItemUserControl}}}" 
+                               Stroke="Black" StrokeThickness="1"
+                               Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                               Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                </VisualBrush.Visual>
+            </VisualBrush>
+        </Border.BorderBrush>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

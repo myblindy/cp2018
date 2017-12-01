@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="cp2018.Pages.StatusPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="clr-namespace:cp2018.Pages"
+      xmlns:infrastructure="clr-namespace:cp2018.Infrastructure" 
+      xmlns:commands="clr-namespace:cp2018.Infrastructure.Commands">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="commands:StatusCommands.DesignMode" Executed="DesignMode_Executed" CanExecute="DesignMode_CanExecute"/>
+    </UserControl.CommandBindings>
+
+    <DockPanel>
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                <CheckBox Command="commands:StatusCommands.DesignMode" 
+                          CommandTarget="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:StatusPage}}}"
+                          CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}, Mode=OneWay}"
+                          Content="Design Mode" />
+            </ToolBar>
+        </ToolBarTray>
+        <infrastructure:MonitorItemsControl x:Name="Items" DesignMode="{Binding DesignMode}" />
+    </DockPanel>
+</UserControl>

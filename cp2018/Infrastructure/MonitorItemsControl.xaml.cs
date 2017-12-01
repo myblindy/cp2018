@@ -72,6 +72,10 @@ namespace cp2018.Infrastructure
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public static readonly DependencyProperty DesignModeProperty = DependencyProperty.Register(
+            "DesignMode", typeof(bool), typeof(MonitorItemsControl), new PropertyMetadata(false));
+        public bool DesignMode { get => (bool)GetValue(DesignModeProperty); set => SetValue(DesignModeProperty, value); }
+
         public MonitorItemsControl()
         {
             InitializeComponent();
@@ -80,7 +84,7 @@ namespace cp2018.Infrastructure
         IEnumerable realItemsSource;
         public IEnumerable ItemsSource
         {
-            get { return realItemsSource; }
+            get => realItemsSource;
             set
             {
                 Items.ItemsSource = (realItemsSource = value).Cast<MonitoredItem>().Select(o => new MonitoredItemWrapper(0, 0, o)).ToArray();
@@ -91,8 +95,11 @@ namespace cp2018.Infrastructure
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
             base.OnRenderSizeChanged(sizeInfo);
-            UpdateItemsLayout();
+            if (!DesignerProperties.GetIsInDesignMode(this))
+                UpdateItemsLayout();
         }
+
+        internal MonitorItemUserControl SelectedItem;
 
         void UpdateItemsLayout()
         {
@@ -108,12 +115,12 @@ namespace cp2018.Infrastructure
 
             var bitmap = new List<BitArray> { new BitArray(maxw) };
 
-            Func<int, int, MonitoredItem, bool> fits = (bmpx, bmpy, item) =>
-              {
-                  while (bmpy + item.Height >= bitmap.Count) bitmap.Add(new BitArray(maxw));
-                  return maxw >= bmpx + item.Width &&
+            bool fits(int bmpx, int bmpy, MonitoredItem item)
+            {
+                while (bmpy + item.Height >= bitmap.Count) bitmap.Add(new BitArray(maxw));
+                return maxw >= bmpx + item.Width &&
                     bitmap.Skip(bmpy).Take(item.Height).All(r => r.Cast<bool>().Skip(bmpx).Take(item.Width).All(w => !w));
-              };
+            }
 
             foreach (MonitoredItemWrapper witem in Items.ItemsSource)
             {
@@ -121,7 +128,8 @@ namespace cp2018.Infrastructure
                 while (x >= maxw || !fits(x, y, witem.Object))
                     if (++x >= maxw)
                     {
-                        x = 0; ++y;
+                        x = 0;
+                        ++y;
                     }
 
                 // position this guy
